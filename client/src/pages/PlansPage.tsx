@@ -42,7 +42,7 @@ export default function PlansPage() {
     }
     setLoading(true);
     try {
-      await invApi.create({ planId: selected.id, amount: amt });
+      await invApi.create({ planId: Number(selected.id), amount: amt });
       toast.success(`Successfully invested in ${selected.name}!`);
       setSelected(null);
       setAmount('');

@@ -57,11 +57,6 @@ export default function LoginPage() {
         <p className="text-center text-gray-400 text-sm mt-6">
           Don't have an account? <Link to="/register" className="text-fanta-400 hover:text-fanta-300 font-medium">Create one</Link>
         </p>
-
-        <div className="mt-6 pt-4 border-t border-gray-800 text-center">
-          <p className="text-xs text-gray-500">Demo: <strong>demo@fanta.io</strong> / <strong>password123</strong></p>
-          <p className="text-xs text-gray-500 mt-1">Admin: <strong>admin@fanta.io</strong> / <strong>password123</strong></p>
-        </div>
       </div>
     </div>
   );

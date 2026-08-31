@@ -52,12 +52,12 @@ export async function seedDatabase(): Promise<void> {
   // 3. Seed admin user
   const adminExists = queryOne('SELECT id FROM users WHERE email = ?', ['admin@fanta.io']);
   if (!adminExists) {
-    const hash = await bcrypt.hash('password123', 10);
+    const hash = await bcrypt.hash('admin@fanta.io', 10);
     run(
       'INSERT INTO users (email, password_hash, first_name, last_name, role, is_verified, country_code) VALUES (?, ?, ?, ?, ?, ?, ?)',
       ['admin@fanta.io', hash, 'Admin', 'User', 'admin', 1, 'KE']
     );
-    console.log('✅ Admin user created: admin@fanta.io / password123');
+    console.log('✅ Admin user created: admin@fanta.io / admin@fanta.io');
   }
 
   // 4. Seed demo user with wallets, admin wallet, investments, deposits, withdrawals
