@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Shield, TrendingUp, Wallet, BarChart3, AlertTriangle, ArrowRight, ChevronRight, CreditCard, Smartphone, Globe, Zap, Star, Users, Clock } from 'lucide-react';
+import { Shield, TrendingUp, Wallet, BarChart3, AlertTriangle, ArrowRight, ChevronRight, CreditCard, Smartphone, Globe, Zap, Star, Users, Clock, Rocket, Trophy, Flame } from 'lucide-react';
 import { crypto as cryptoApi } from '../services/api';
 import FantaLogo from '../components/FantaLogo';
 import FantaSoda from '../components/FantaSoda';
@@ -10,14 +10,15 @@ import type { CryptoPrice } from '../types';
 const features = [
   { icon: Shield, title: 'Bank-Grade Security', desc: 'Encrypted accounts, 2FA support, and cold-storage practices protect your assets.' },
   { icon: TrendingUp, title: 'Diversified Strategies', desc: 'From conservative to aggressive — choose plans that match your risk appetite.' },
-  { icon: Wallet, title: 'Multiple Payment Methods', desc: 'Deposit via M-Pesa, Airtel Money, Card, or PayPal. Withdraw anytime.' },
+  { icon: Wallet, title: 'Multiple Payment Methods', desc: 'Deposit via M-Pesa, Crypto Transfer, Card, Airtel Money, or PayPal.' },
   { icon: BarChart3, title: 'Portfolio Tracking', desc: 'Real-time dashboards with performance charts and transaction history.' },
 ];
 
 const paymentMethods = [
-  { icon: Smartphone, name: 'M-Pesa', desc: 'Instant mobile money deposits & withdrawals', color: 'text-green-400' },
+  { icon: Smartphone, name: 'M-Pesa', desc: 'Instant mobile money via Safaricom', color: 'text-green-400' },
+  { icon: Wallet, name: 'Crypto Transfer', desc: 'Send BTC, ETH, USDT, SOL directly to our wallet', color: 'text-orange-400' },
+  { icon: CreditCard, name: 'Card', desc: 'Visa & Mastercard — enter card details directly', color: 'text-blue-400' },
   { icon: Smartphone, name: 'Airtel Money', desc: 'Quick mobile money transfers', color: 'text-red-400' },
-  { icon: CreditCard, name: 'Card', desc: 'Visa & Mastercard supported worldwide', color: 'text-blue-400' },
   { icon: Globe, name: 'PayPal', desc: 'Global payments in 200+ countries', color: 'text-indigo-400' },
 ];
 
@@ -57,9 +58,11 @@ export default function LandingPage() {
 
               <p className="text-gray-300 text-lg md:text-xl mb-8 max-w-lg leading-relaxed">
                 Start investing in crypto with as little as <span className="text-fanta-400 font-bold">199 KES</span>. 
-                Real-time prices. Instant deposits via <span className="text-green-400 font-medium">M-Pesa</span>, 
-                <span className="text-red-400 font-medium"> Airtel Money</span>, 
-                <span className="text-blue-400 font-medium"> Card</span>, or 
+                Real-time prices. Deposit via 
+                <span className="text-green-400 font-medium"> M-Pesa</span>, 
+                <span className="text-orange-400 font-medium"> Crypto Transfer</span>, 
+                <span className="text-blue-400 font-medium"> Card</span>, 
+                <span className="text-red-400 font-medium"> Airtel Money</span>, or 
                 <span className="text-indigo-400 font-medium"> PayPal</span>.
               </p>
 
@@ -158,7 +161,7 @@ export default function LandingPage() {
             <span className="text-fanta-400 font-bold text-sm uppercase tracking-wider">Pay Your Way</span>
             <h2 className="text-3xl md:text-4xl font-black mt-2 mb-4">Flexible <span className="text-fanta-500">Payments</span></h2>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {paymentMethods.map((pm) => (
               <div key={pm.name} className="flex items-center gap-4 bg-gray-800 border border-gray-700 rounded-xl p-5 hover:border-fanta-600/50 hover:bg-gray-750 transition-all">
                 <div className={`w-14 h-14 rounded-xl bg-gray-700/50 flex items-center justify-center ${pm.color}`}>
@@ -184,7 +187,7 @@ export default function LandingPage() {
             </div>
             <div className="text-center lg:text-left flex-1">
               <h2 className="text-3xl md:text-4xl font-black mb-3">Ready to Start?</h2>
-              <p className="text-gray-300 mb-6 text-lg">Join thousands of investors. Start with just <span className="text-fanta-400 font-bold">199 KES</span>. Invest KSh5,000+ to unlock withdrawals from <span className="text-fanta-400 font-bold">$10 USD</span>.</p>
+              <p className="text-gray-300 mb-6 text-lg">Join thousands of investors. Start with just <span className="text-fanta-400 font-bold">199 KES</span>. Withdraw from as little as <span className="text-fanta-400 font-bold">$10 USD</span>.</p>
               <Link to="/register" className="btn-primary text-lg !px-8 !py-4 inline-flex items-center gap-2 shadow-lg shadow-fanta-600/25">
                 Create Free Account <ChevronRight size={20} />
               </Link>
@@ -205,21 +208,40 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Risk Disclaimer */}
-      <section className="bg-gray-900/50 border-t border-gray-800">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex gap-4">
-            <AlertTriangle className="text-yellow-500 shrink-0 mt-1" size={24} />
-            <div>
-              <h3 className="text-lg font-bold text-yellow-500 mb-2">Risk Disclaimer</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">
-                Cryptocurrency investments carry significant risk, including the potential loss of your entire investment. 
-                Expected return ranges are <strong className="text-gray-300">illustrative only</strong>. 
-                Minimum investment: <strong className="text-fanta-400">199 KES (~$1.50 USD)</strong>. 
-                Minimum withdrawal: <strong className="text-fanta-400">$10 USD</strong> (requires KSh5,000+ in investments).
-                You should only invest what you can afford to lose.
-              </p>
+      {/* Why Investors Love Us — Motivational */}
+      <section className="bg-gradient-to-br from-fanta-950/40 via-gray-950 to-gray-950 border-t border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="text-center mb-16">
+            <span className="text-fanta-400 font-bold text-sm uppercase tracking-wider">Join the Movement</span>
+            <h2 className="text-3xl md:text-5xl font-black mt-2 mb-4">Your Financial Freedom <span className="text-transparent bg-clip-text bg-gradient-to-r from-fanta-400 to-yellow-400">Starts Here</span></h2>
+            <p className="text-gray-400 max-w-2xl mx-auto text-lg">Thousands are already building wealth with Fanta Investments. The best time to start was yesterday — the next best time is now.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="text-center p-8 rounded-2xl bg-gray-800/50 border border-gray-700 hover:border-fanta-600/50 transition-all">
+              <div className="w-16 h-16 rounded-2xl bg-fanta-600/20 flex items-center justify-center mx-auto mb-5">
+                <Rocket className="text-fanta-400" size={32} />
+              </div>
+              <h3 className="text-xl font-bold mb-3">Start Small, Dream Big</h3>
+              <p className="text-gray-400 text-sm leading-relaxed">Begin with just 199 KES. Every great fortune started with a single step. Your journey to financial independence begins today.</p>
             </div>
+            <div className="text-center p-8 rounded-2xl bg-gray-800/50 border border-gray-700 hover:border-fanta-600/50 transition-all">
+              <div className="w-16 h-16 rounded-2xl bg-green-600/20 flex items-center justify-center mx-auto mb-5">
+                <Trophy className="text-green-400" size={32} />
+              </div>
+              <h3 className="text-xl font-bold mb-3">Proven Strategies</h3>
+              <p className="text-gray-400 text-sm leading-relaxed">Our expert-managed portfolios leverage cutting-edge DeFi and institutional-grade strategies to maximize your growth potential.</p>
+            </div>
+            <div className="text-center p-8 rounded-2xl bg-gray-800/50 border border-gray-700 hover:border-fanta-600/50 transition-all">
+              <div className="w-16 h-16 rounded-2xl bg-orange-600/20 flex items-center justify-center mx-auto mb-5">
+                <Flame className="text-orange-400" size={32} />
+              </div>
+              <h3 className="text-xl font-bold mb-3">Your Wealth, Your Rules</h3>
+              <p className="text-gray-400 text-sm leading-relaxed">Withdraw anytime from $10 USD. Multiple payment methods. Full control over your investments — whenever you want, wherever you are.</p>
+            </div>
+          </div>
+          <div className="text-center mt-12">
+            <p className="text-fanta-400 font-bold text-lg mb-2">🚀 Over 10,000 investors have already joined</p>
+            <p className="text-gray-500 text-sm">Don't wait for the perfect moment. Take the moment and make it perfect.</p>
           </div>
         </div>
       </section>

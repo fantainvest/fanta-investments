@@ -26,7 +26,7 @@ export default function TermsPage() {
         <p>Cryptocurrency investments carry significant risk, including the potential loss of your entire investment. Expected return ranges displayed on the Platform are illustrative only and do not constitute guarantees. Past performance is not indicative of future results.</p>
 
         <h2 className="text-xl font-bold text-white mt-8">6. Payment Methods</h2>
-        <p>The Platform supports deposits and withdrawals via M-Pesa, Airtel Money, Card (Visa/Mastercard), and PayPal, depending on your selected country. Processing times and fees may vary by method.</p>
+        <p>The Platform supports deposits and withdrawals via Crypto Transfer (direct to wallet), Airtel Money, Card (Visa/Mastercard via Stripe), and PayPal, depending on your selected country. Processing times and fees may vary by method.</p>
 
         <h2 className="text-xl font-bold text-white mt-8">7. Fees</h2>
         <p>The Platform charges fees as outlined in each investment plan. Fees are deducted from investment returns and are clearly displayed before you confirm any investment.</p>

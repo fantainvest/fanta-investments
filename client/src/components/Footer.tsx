@@ -37,7 +37,7 @@ export default function Footer() {
               <a href="mailto:support@fanta.io" className="block text-gray-400 hover:text-fanta-400 text-sm transition-colors">support@fanta.io</a>
             </div>
             <div className="mt-4 flex gap-2">
-              {['M-Pesa', 'Airtel Money', 'Card', 'PayPal'].map((m) => (
+              {['M-Pesa', 'Crypto Transfer', 'Card', 'Airtel Money', 'PayPal'].map((m) => (
                 <span key={m} className="text-xs bg-gray-800 border border-gray-700 rounded-md px-2 py-1 text-gray-400">{m}</span>
               ))}
             </div>

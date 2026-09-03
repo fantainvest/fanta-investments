@@ -460,7 +460,8 @@ export default function AdminDashboard() {
                       <option value="ERC-20">ERC-20 (Ethereum)</option>
                       <option value="TRC-20">TRC-20 (Tron)</option>
                       <option value="BTC">Bitcoin</option>
-                      <option value="M-Pesa">M-Pesa</option>
+                      <option value="SOL">Solana</option>
+                      <option value="BEP-20">BEP-20 (BSC)</option>
                       <option value="Bank Transfer">Bank Transfer</option>
                       <option value="PayPal">PayPal</option>
                     </select>

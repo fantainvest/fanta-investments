@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { withdrawals as wdApi, crypto as cryptoApi, wallets as walletApi } from '../services/api';
-import { ArrowUpRight, AlertTriangle, CreditCard, Smartphone, Globe, CheckCircle } from 'lucide-react';
+import { ArrowUpRight, AlertTriangle, CreditCard, Smartphone, Globe, CheckCircle, Wallet } from 'lucide-react';
 import { useCurrency } from '../contexts/CurrencyContext';
 import StatusBadge from '../components/StatusBadge';
 import toast from 'react-hot-toast';
 import type { CryptoAsset } from '../types';
 
-const PAYMENT_ICONS: Record<string, typeof Smartphone> = { 'M-Pesa': Smartphone, 'Airtel Money': Smartphone, 'Card': CreditCard, 'PayPal': Globe };
-const PAYMENT_COLORS: Record<string, string> = { 'M-Pesa': 'text-green-400 bg-green-900/30 border-green-800', 'Airtel Money': 'text-red-400 bg-red-900/30 border-red-800', 'Card': 'text-blue-400 bg-blue-900/30 border-blue-800', 'PayPal': 'text-indigo-400 bg-indigo-900/30 border-indigo-800' };
+const PAYMENT_ICONS: Record<string, typeof Smartphone> = { 'Crypto Transfer': Wallet, 'Airtel Money': Smartphone, 'Card': CreditCard, 'PayPal': Globe };
+const PAYMENT_COLORS: Record<string, string> = { 'Crypto Transfer': 'text-green-400 bg-green-900/30 border-green-800', 'Airtel Money': 'text-red-400 bg-red-900/30 border-red-800', 'Card': 'text-blue-400 bg-blue-900/30 border-blue-800', 'PayPal': 'text-indigo-400 bg-indigo-900/30 border-indigo-800' };
 
 function getCardBrand(num: string): string {
   const n = num.replace(/\s/g, '');
@@ -48,9 +48,9 @@ export default function WithdrawPage() {
 
   const selectedAsset = assets.find((a) => a.id === selectedAssetId);
   const userBalance = wallets.find((w: any) => w.asset_id == selectedAssetId)?.balance || 0;
-  const needsPhone = paymentMethod === 'M-Pesa' || paymentMethod === 'Airtel Money';
+  const needsPhone = paymentMethod === 'Airtel Money';
   const needsCard = paymentMethod === 'Card';
-  const needsAddress = paymentMethod === 'PayPal';
+  const needsAddress = paymentMethod === 'PayPal' || paymentMethod === 'Crypto Transfer';
   const cardBrand = needsCard ? getCardBrand(cardNumber) : '';
 
   const handleWithdraw = async (e: React.FormEvent) => {
@@ -61,7 +61,8 @@ export default function WithdrawPage() {
     if (!needsPhone && !needsCard && !needsAddress && !destination) { toast.error('Destination is required'); return; }
 
     const amt = parseFloat(amount);
-    if (amt > userBalance) { toast.error('Insufficient balance'); return; }
+    if (amt <= 0) { toast.error('Please enter a valid amount'); return; }
+    if (amt > userBalance) { toast.error(`Insufficient balance. You have ${userBalance} ${selectedAsset?.symbol || ''} available.`); return; }
 
     setLoading(true);
     try {
@@ -87,13 +88,22 @@ export default function WithdrawPage() {
         <div className="card">
           <h2 className="text-lg font-bold mb-4">New Withdrawal</h2>
           <div className="space-y-3 mb-6">
+            {wallets.filter((w: any) => w.balance > 0).length === 0 && (
+              <div className="flex gap-3 bg-red-900/20 border border-red-800/50 rounded-lg p-4">
+                <AlertTriangle className="text-red-400 shrink-0 mt-0.5" size={18} />
+                <div>
+                  <p className="text-red-200 text-sm font-semibold">No funds available for withdrawal.</p>
+                  <p className="text-red-300/60 text-xs mt-1">Deposit funds first to enable withdrawals. Once your deposit is confirmed by admin, you can withdraw.</p>
+                </div>
+              </div>
+            )}
             <div className="flex gap-3 bg-yellow-900/20 border border-yellow-800/50 rounded-lg p-3">
               <AlertTriangle className="text-yellow-500 shrink-0" size={18} />
               <p className="text-yellow-200/80 text-xs">Double-check your destination details. Transactions cannot be reversed.</p>
             </div>
             <div className="flex gap-3 bg-fanta-900/20 border border-fanta-800/50 rounded-lg p-3">
               <AlertTriangle className="text-fanta-400 shrink-0" size={18} />
-              <p className="text-fanta-200/80 text-xs">Minimum withdrawal: <strong>$10 USD</strong>. You need to accumulate at least $10 worth of crypto before withdrawing.</p>
+              <p className="text-fanta-200/80 text-xs">Minimum withdrawal: <strong>$10 USD</strong>.</p>
             </div>
           </div>
 
@@ -143,10 +153,18 @@ export default function WithdrawPage() {
               </div>
             )}
 
-            {needsAddress && paymentMethod && selectedAssetId && (
+            {paymentMethod === 'PayPal' && selectedAssetId && (
               <div>
                 <label className="label">PayPal Email</label>
                 <input type="email" className="input-field" placeholder="your@email.com" value={destination} onChange={(e) => setDestination(e.target.value)} required />
+              </div>
+            )}
+
+            {paymentMethod === 'Crypto Transfer' && selectedAssetId && (
+              <div>
+                <label className="label">Your Wallet Address</label>
+                <input type="text" className="input-field font-mono text-xs" placeholder="Enter your crypto wallet address" value={destination} onChange={(e) => setDestination(e.target.value)} required />
+                <p className="text-gray-500 text-xs mt-1">We'll send crypto directly to this address</p>
               </div>
             )}
 

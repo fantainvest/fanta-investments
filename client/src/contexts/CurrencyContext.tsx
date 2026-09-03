@@ -16,7 +16,7 @@ export const COUNTRIES: CountryOption[] = [
     currency: 'KES',
     currencySymbol: 'KSh',
     flag: '🇰🇪',
-    paymentMethods: ['M-Pesa', 'Airtel Money', 'Card', 'PayPal'],
+    paymentMethods: ['M-Pesa', 'Crypto Transfer', 'Airtel Money', 'Card', 'PayPal'],
   },
   {
     code: 'US',
@@ -24,15 +24,11 @@ export const COUNTRIES: CountryOption[] = [
     currency: 'USDT',
     currencySymbol: '$',
     flag: '🇺🇸',
-    paymentMethods: ['Card', 'PayPal'],
-  },
-  {
-    code: 'NG',
-    name: 'Nigeria',
+    paymentMethods: ['Crypto Transfer', 'Card', 'PayPal'],
     currency: 'NGN',
     currencySymbol: '₦',
     flag: '🇳🇬',
-    paymentMethods: ['Card', 'PayPal'],
+    paymentMethods: ['Crypto Transfer', 'Card', 'PayPal'],
   },
   {
     code: 'GB',
@@ -40,7 +36,7 @@ export const COUNTRIES: CountryOption[] = [
     currency: 'GBP',
     currencySymbol: '£',
     flag: '🇬🇧',
-    paymentMethods: ['Card', 'PayPal'],
+    paymentMethods: ['Crypto Transfer', 'Card', 'PayPal'],
   },
   {
     code: 'ZA',
@@ -48,7 +44,7 @@ export const COUNTRIES: CountryOption[] = [
     currency: 'ZAR',
     currencySymbol: 'R',
     flag: '🇿🇦',
-    paymentMethods: ['Card', 'PayPal'],
+    paymentMethods: ['Crypto Transfer', 'Card', 'PayPal'],
   },
   {
     code: 'TZ',
@@ -56,7 +52,7 @@ export const COUNTRIES: CountryOption[] = [
     currency: 'TZS',
     currencySymbol: 'TSh',
     flag: '🇹🇿',
-    paymentMethods: ['M-Pesa', 'Airtel Money', 'Card'],
+    paymentMethods: ['Crypto Transfer', 'Airtel Money', 'Card'],
   },
   {
     code: 'UG',
@@ -64,7 +60,7 @@ export const COUNTRIES: CountryOption[] = [
     currency: 'UGX',
     currencySymbol: 'USh',
     flag: '🇺🇬',
-    paymentMethods: ['M-Pesa', 'Airtel Money', 'Card'],
+    paymentMethods: ['Crypto Transfer', 'Airtel Money', 'Card'],
   },
   {
     code: 'IN',
@@ -72,7 +68,7 @@ export const COUNTRIES: CountryOption[] = [
     currency: 'INR',
     currencySymbol: '₹',
     flag: '🇮🇳',
-    paymentMethods: ['Card', 'PayPal'],
+    paymentMethods: ['Crypto Transfer', 'Card', 'PayPal'],
   },
 ];
 

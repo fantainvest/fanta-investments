@@ -355,6 +355,156 @@ export interface MockPrice {
   change_24h: number;
 }
 
+// ── Activity Feed (generated at startup) ──
+export interface MockActivity {
+  id: string;
+  user_name: string;
+  action: 'deposit' | 'withdrawal';
+  amount: number;
+  symbol: string;
+  created_at: string;
+}
+
+// Seed-based pseudo-random for deterministic results
+function seededRandom(seed: number) {
+  let s = seed;
+  return () => {
+    s = (s * 16807 + 0) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+
+export function generateActivityFeed(count: number = 5000): MockActivity[] {
+  const rand = seededRandom(42);
+
+  const firstNames = [
+    'James','Mary','Robert','Patricia','John','Jennifer','Michael','Linda','David','Elizabeth',
+    'William','Barbara','Richard','Susan','Joseph','Jessica','Thomas','Sarah','Charles','Karen',
+    'Christopher','Lisa','Daniel','Nancy','Matthew','Betty','Anthony','Margaret','Mark','Sandra',
+    'Donald','Ashley','Steven','Kimberly','Paul','Emily','Andrew','Donna','Joshua','Michelle',
+    'Kenneth','Carol','Kevin','Amanda','Brian','Dorothy','George','Melissa','Timothy','Deborah',
+    'Ronald','Stephanie','Edward','Rebecca','Jason','Sharon','Jeffrey','Laura','Ryan','Cynthia',
+    'Jacob','Kathleen','Gary','Amy','Nicholas','Angela','Eric','Shirley','Jonathan','Anna',
+    'Stephen','Brenda','Larry','Pamela','Justin','Emma','Scott','Nicole','Brandon','Helen',
+    'Benjamin','Samantha','Samuel','Katherine','Raymond','Christine','Gregory','Debra','Frank','Rachel',
+    'Alexander','Carolyn','Patrick','Janet','Jack','Catherine','Dennis','Maria','Jerry','Heather',
+    'Tyler','Diane','Aaron','Ruth','Jose','Julie','Adam','Olivia','Nathan','Joyce',
+    'Henry','Virginia','Douglas','Victoria','Zachary','Kelly','Peter','Lauren','Kyle','Christina',
+    'Noah','Joan','Ethan','Evelyn','Jeremy','Judith','Walter','Megan','Christian','Andrea',
+    'Keith','Cheryl','Roger','Hannah','Terry','Jacqueline','Austin','Martha','Sean','Gloria',
+    'Gerald','Teresa','Carl','Ann','Harold','Sara','Dylan','Madison','Arthur','Frances',
+    'Lawrence','Kathryn','Jordan','Janice','Jesse','Jean','Bryan','Abigail','Billy','Alice',
+    'Bruce','Judy','Gabriel','Sophia','Joe','Grace','Logan','Denise','Albert','Amber',
+    'Willie','Doris','Alan','Marilyn','Eugene','Danielle','Russell','Beverly','Vincent','Isabella',
+    'Philip','Theresa','Bobby','Diana','Johnny','Natalie','Bradley','Brittany','Roy','Charlotte',
+    'Elijah','Marie','Randy','Kayla','Wayne','Alexis','Howard','Lori',
+    'Mohammed','Fatima','Omar','Aisha','Hassan','Zara','Ali','Nadia','Yusuf','Amina',
+    'Ahmed','Leila','Ibrahim','Safiya','Khalid','Huda','Tariq','Mona','Rashid','Salma',
+    'Kenji','Yuki','Hiroshi','Sakura','Takeshi','Hana','Akira','Mei','Ryo','Aoi',
+    'Jin','Eunji','Minho','Soojung','Donghyuk','Seoyeon','Taemin','Jiwon','Sungmin','Hayoung',
+    'Wei','Xiaoming','Ling','Yifei','Jun','Mei','Chen','Xiao','Zhang','Fang',
+    'Raj','Priya','Amit','Ananya','Vikram','Deepa','Sanjay','Kavita','Rahul','Pooja',
+    'Carlos','Maria','Diego','Camila','Miguel','Valentina','Santiago','Daniela','Mateo','Isabella',
+    'Pierre','Marie','Jean','Sophie','Louis','Camille','Antoine','Juliette','Henri','Emilie',
+    'Hans','Anna','Fritz','Greta','Otto','Helga','Karl','Ingrid','Werner','Ulla',
+    'Ivan','Olga','Dmitri','Natasha','Sergei','Tatiana','Vladimir','Irina','Nikolai','Elena',
+    'Aiden','Olivia','Liam','Emma','Mason','Ava','Logan','Sophia','Lucas','Mia',
+    'Noah','Charlotte','Ethan','Amelia','Oliver','Harper','Elijah','Evelyn','James','Abigail',
+    'Benjamin','Emily','William','Elizabeth','Alexander','Avery','Henry','Sofia','Sebastian','Ella',
+    'Jack','Scarlett','Owen','Grace','Daniel','Chloe','Michael','Victoria','Leo','Riley',
+    'Isaacs','Aria','Jackson','Lily','Samuel','Eleanor','Ryan','Hannah','Mateo','Lillian',
+    'David','Addison','Joseph','Aubrey','Carter','Ellie','Wyatt','Stella','John','Natalie',
+    'Luke','Zoey','Grayson','Leah','Julian','Hazel','Leo','Violet','Lincoln','Aurora',
+    'Gabriel','Savannah','Isaac','Audrey','Jayden','Brooklyn','Carson','Bella','Jaxon','Claire',
+    'Luke','Skylar','Anthony','Lucy','Dylan','Paisley','Lincoln','Everly','Thomas','Anna',
+    'Charles','Caroline','Christopher','Nova','Maverick','Genesis','Josiah','Emilia',
+  ];
+
+  const lastNames = [
+    'Smith','Johnson','Williams','Brown','Jones','Garcia','Miller','Davis','Rodriguez','Martinez',
+    'Hernandez','Lopez','Gonzalez','Wilson','Anderson','Thomas','Taylor','Moore','Jackson','Martin',
+    'Lee','Perez','Thompson','White','Harris','Sanchez','Clark','Ramirez','Lewis','Robinson',
+    'Walker','Young','Allen','King','Wright','Scott','Torres','Nguyen','Hill','Flores',
+    'Green','Adams','Nelson','Baker','Hall','Rivera','Campbell','Mitchell','Carter','Roberts',
+    'Gomez','Phillips','Evans','Turner','Diaz','Parker','Cruz','Edwards','Collins','Reyes',
+    'Stewart','Morris','Morales','Murphy','Cook','Rogers','Gutierrez','Ortiz','Morgan','Cooper',
+    'Peterson','Bailey','Reed','Kelly','Howard','Ramos','Kim','Cox','Ward','Richardson',
+    'Watson','Brooks','Chavez','Wood','James','Bennett','Gray','Mendoza','Ruiz','Hughes',
+    'Price','Alvarez','Castillo','Sanders','Patel','Myers','Long','Ross','Foster','Jimenez',
+    'Powell','Jenkins','Perry','Russell','Sullivan','Bell','Coleman','Butler','Henderson','Barnes',
+    'Gonzales','Fisher','Vasquez','Simmons','Patterson','Jordan','Reynolds','Hamilton','Graham','Kim',
+    'Gonzalez','Alexander','Ramos','Wallace','Griffin','West','Cole','Hayes','Chavez','Gibson',
+    'Bryant','Ellis','Stevens','Murray','Ford','Marshall','Owens','Harrison','Fernandez','Wells',
+    'Webb','Simpson','Tucker','Porter','Hunter','Hicks','Crawford','Henry','Boyd','Mason',
+    'Morales','Kennedy','Warren','Dixon','Ramos','Reeves','Burns','Gordon','Shaw','Holmes',
+    'Rice','Robertson','Hunt','Black','Daniels','Palmer','Mills','Grant','Cunningham','Williamson',
+    'Chen','Wang','Li','Zhang','Liu','Yang','Huang','Wu','Zhou','Sun',
+    'Ma','Zhu','Hu','Lin','Guo','Luo','Xiao','Liang','Song','Deng',
+    'Tan','Wong','Chan','Lee','Ho','Lam','Ng','Chow','Tang','Wan',
+    'Singh','Kumar','Sharma','Patel','Gupta','Reddy','Nair','Iyer','Joshi','Mishra',
+    'Shah','Desai','Mehta','Thakkar','Bhatt','Pandya','Rao','Menon','Kapoor','Khanna',
+    'Müller','Schmidt','Schneider','Fischer','Weber','Meyer','Wagner','Becker','Schulz','Hoffmann',
+    'Dubois','Moreau','Laurent','Simon','Michel','Lefevre','Leroy','Roux','David','Bertrand',
+    'Rossi','Russo','Ferrari','Esposito','Bianchi','Romano','Colombo','Ricci','Marino','Greco',
+    'Tanaka','Yamamoto','Nakamura','Kobayashi','Sato','Watanabe','Ito','Takahashi','Suzuki','Kimura',
+    'Silva','Santos','Souza','Oliveira','Costa','Pereira','Rodrigues','Almeida','Nascimento','Lima',
+    'Ali','Hassan','Khan','Malik','Hussain','Butt','Chaudhry','Sheikh','Dar','Raja',
+    'Okafor','Ibrahim','Mohamed','Osei','Mensah','Asante','Moyo','Kamara','Diallo','Traore',
+  ];
+
+  const symbols = ['USDT', 'BTC', 'ETH', 'SOL', 'BNB', 'XRP', 'ADA', 'DOT'];
+
+  // Deposit amounts: weighted to look realistic
+  const depositAmounts = [
+    10, 25, 50, 75, 100, 150, 200, 250, 300, 500,
+    750, 1000, 1500, 2000, 2500, 3000, 5000, 7500,
+    10000, 15000, 20000, 25000, 30000, 50000, 75000, 100000,
+  ];
+
+  const withdrawalAmounts = [
+    10, 20, 50, 75, 100, 150, 200, 250, 300, 500,
+    750, 1000, 1500, 2000, 2500, 3000, 5000, 7500,
+    10000, 15000, 20000,
+  ];
+
+  // Generate entries spanning the last 90 days
+  const now = Date.now();
+  const ninetyDaysMs = 90 * 24 * 60 * 60 * 1000;
+
+  const entries: MockActivity[] = [];
+
+  for (let i = 0; i < count; i++) {
+    const firstName = firstNames[Math.floor(rand() * firstNames.length)];
+    const lastName = lastNames[Math.floor(rand() * lastNames.length)];
+    const action: 'deposit' | 'withdrawal' = rand() < 0.55 ? 'deposit' : 'withdrawal';
+    const amounts = action === 'deposit' ? depositAmounts : withdrawalAmounts;
+    const amount = amounts[Math.floor(rand() * amounts.length)];
+    const symbol = symbols[Math.floor(rand() * symbols.length)];
+    const ts = new Date(now - ninetyDaysMs * rand()).toISOString();
+
+    entries.push({
+      id: `act-${i + 1}`,
+      user_name: `${firstName} ${lastName[0]}.`,
+      action,
+      amount,
+      symbol,
+      created_at: ts,
+    });
+  }
+
+  // Sort newest first
+  entries.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+  return entries;
+}
+
+// Lazy singleton
+let _feed: MockActivity[] | null = null;
+export function getActivityFeed(): MockActivity[] {
+  if (!_feed) _feed = generateActivityFeed(5000);
+  return _feed;
+}
+
 export const mockPrices: MockPrice[] = [
   { symbol: 'BTC', price_usd: 112450.80, change_24h: 2.34 },
   { symbol: 'ETH', price_usd: 4520.15, change_24h: 1.87 },

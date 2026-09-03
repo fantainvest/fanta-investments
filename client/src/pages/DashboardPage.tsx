@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Wallet, TrendingUp, ArrowUpRight, ArrowDownRight, Clock, DollarSign, Activity, ArrowRight } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { wallets as walletApi, investments as invApi, deposits as depApi, withdrawals as wdApi, crypto as cryptoApi } from '../services/api';
+import { wallets as walletApi, investments as invApi, deposits as depApi, withdrawals as wdApi, crypto as cryptoApi, activity as activityApi } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import { useCurrency } from '../contexts/CurrencyContext';
 import StatusBadge from '../components/StatusBadge';
@@ -14,6 +14,18 @@ const chartData = [
   { name: 'Sep', value: 14500 },
 ];
 
+function timeAgo(dateStr: string): string {
+  const seconds = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
+  if (seconds < 60) return 'just now';
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days}d ago`;
+  return `${Math.floor(days / 30)}mo ago`;
+}
+
 export default function DashboardPage() {
   const { user } = useAuth();
   const { country, formatAmount } = useCurrency();
@@ -23,6 +35,9 @@ export default function DashboardPage() {
   const [depositsList, setDeposits] = useState<any[]>([]);
   const [withdrawalsList, setWithdrawals] = useState<any[]>([]);
   const [prices, setPrices] = useState<any[]>([]);
+  const [activities, setActivities] = useState<any[]>([]);
+  const [activityPage, setActivityPage] = useState(1);
+  const [activityTotal, setActivityTotal] = useState(0);
 
   useEffect(() => {
     Promise.all([
@@ -31,7 +46,8 @@ export default function DashboardPage() {
       depApi.list().catch(() => []),
       wdApi.list().catch(() => []),
       cryptoApi.prices().catch(() => []),
-    ]).then(([w, i, d, wd, p]) => {
+      activityApi.feed(1, 50).catch(() => ({ activities: [], total: 0 })),
+    ]).then(([w, i, d, wd, p, act]) => {
       if (w && typeof w === 'object' && 'wallets' in w) {
         setWallets(w.wallets || []);
         setWalletSummary(w.summary || null);
@@ -42,8 +58,21 @@ export default function DashboardPage() {
       setDeposits(d);
       setWithdrawals(wd);
       setPrices(p);
+      if (act && 'activities' in act) {
+        setActivities(act.activities || []);
+        setActivityTotal(act.total || 0);
+      }
     });
   }, []);
+
+  const loadMoreActivities = async () => {
+    const nextPage = activityPage + 1;
+    try {
+      const res = await activityApi.feed(nextPage, 50);
+      setActivities((prev) => [...prev, ...res.activities]);
+      setActivityPage(nextPage);
+    } catch {}
+  };
 
   const getPrice = (symbol: string) => prices.find((p) => p.symbol === symbol)?.price_usd || 0;
 
@@ -259,6 +288,59 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Community Activity Feed */}
+      {activities.length > 0 && (
+        <div className="card mt-8">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-lg font-bold">Community Activity</h2>
+              <p className="text-gray-400 text-xs">See what other investors are doing in real-time</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+              <span className="text-green-400 text-xs font-medium">Live</span>
+            </div>
+          </div>
+          <div className="space-y-2 max-h-[500px] overflow-y-auto pr-2">
+            {activities.map((act: any) => (
+              <div key={act.id} className="flex items-center gap-3 p-3 bg-gray-800 rounded-lg">
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+                  act.action === 'deposit'
+                    ? 'bg-green-600/20'
+                    : 'bg-orange-600/20'
+                }`}>
+                  {act.action === 'deposit' ? (
+                    <ArrowDownRight className="text-green-400" size={18} />
+                  ) : (
+                    <ArrowUpRight className="text-orange-400" size={18} />
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm">
+                    <span className="font-medium text-white">{act.user_name}</span>
+                    <span className="text-gray-400">
+                      {act.action === 'deposit' ? ' deposited ' : ' withdrew '}
+                    </span>
+                    <span className={`font-bold ${
+                      act.action === 'deposit' ? 'text-green-400' : 'text-orange-400'
+                    }`}>
+                      ${act.amount.toLocaleString()}
+                    </span>
+                    <span className="text-gray-400"> {act.symbol}</span>
+                  </p>
+                  <p className="text-gray-600 text-xs">{timeAgo(act.created_at)}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          {activityPage * 50 < activityTotal && (
+            <button onClick={loadMoreActivities} className="btn-secondary w-full mt-4 text-sm">
+              Load more activity ({activities.length.toLocaleString()} of {activityTotal.toLocaleString()})
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

@@ -1,33 +1,75 @@
-import { AlertTriangle } from 'lucide-react';
+import { Rocket, Shield, TrendingUp, Users, Zap } from 'lucide-react';
 import FantaLogo from '../components/FantaLogo';
+import { Link } from 'react-router-dom';
 
 export default function RiskPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="flex items-center gap-3 mb-8">
         <FantaLogo size={40} />
-        <h1 className="text-3xl font-black">Risk Disclosure</h1>
+        <h1 className="text-3xl font-black">Why Fanta Investments</h1>
       </div>
 
-      <div className="bg-yellow-900/20 border border-yellow-800/50 rounded-xl p-6 mb-8">
-        <p className="text-yellow-200 font-medium">⚠️ Important: Please read this disclosure carefully before investing.</p>
+      <div className="bg-gradient-to-r from-fanta-900/40 to-fanta-800/20 border border-fanta-700/50 rounded-xl p-6 mb-8">
+        <p className="text-fanta-200 font-medium">🚀 We're on a mission to make crypto investing accessible to everyone, everywhere.</p>
       </div>
 
-      <div className="space-y-6 text-gray-300 text-sm leading-relaxed">
-        <h2 className="text-xl font-bold text-white mt-8">General Risk Warning</h2>
-        <p>Cryptocurrency investments are highly speculative and carry a significant risk of loss. The value of digital assets can fluctuate dramatically over short periods.</p>
+      <div className="space-y-8">
+        <div className="card hover:border-fanta-600/50 transition-all">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-xl bg-fanta-600/20 flex items-center justify-center shrink-0">
+              <Shield className="text-fanta-400" size={24} />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-white mb-2">Bank-Grade Security</h2>
+              <p className="text-gray-400 text-sm leading-relaxed">Your funds are protected with enterprise-level encryption, cold storage practices, and 2FA authentication. We take your security as seriously as you do.</p>
+            </div>
+          </div>
+        </div>
 
-        <h2 className="text-xl font-bold text-white mt-8">No Guaranteed Returns</h2>
-        <p>Any return ranges displayed on this Platform are <strong className="text-white">illustrative only</strong> and should not be interpreted as guarantees of future performance.</p>
+        <div className="card hover:border-green-600/50 transition-all">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-xl bg-green-600/20 flex items-center justify-center shrink-0">
+              <TrendingUp className="text-green-400" size={24} />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-white mb-2">Expert-Managed Portfolios</h2>
+              <p className="text-gray-400 text-sm leading-relaxed">Our team of experienced analysts and traders work around the clock to optimize your portfolio. From DeFi yields to institutional strategies — we handle the complexity so you don't have to.</p>
+            </div>
+          </div>
+        </div>
 
-        <h2 className="text-xl font-bold text-white mt-8">Market Volatility</h2>
-        <p>Cryptocurrency markets are known for extreme volatility. Prices can drop 50% or more in a single day.</p>
+        <div className="card hover:border-orange-600/50 transition-all">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-xl bg-orange-600/20 flex items-center justify-center shrink-0">
+              <Zap className="text-orange-400" size={24} />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-white mb-2">Instant Deposits & Fast Withdrawals</h2>
+              <p className="text-gray-400 text-sm leading-relaxed">Deposit via M-Pesa, Card, Crypto Transfer, Airtel Money, or PayPal. Withdraw from as little as $10 USD — your money, your pace.</p>
+            </div>
+          </div>
+        </div>
 
-        <h2 className="text-xl font-bold text-white mt-8">Payment Method Risks</h2>
-        <p>Mobile money transactions (M-Pesa, Airtel Money) may be subject to carrier fees and processing delays. Card payments may incur foreign transaction fees depending on your bank.</p>
+        <div className="card hover:border-purple-600/50 transition-all">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-xl bg-purple-600/20 flex items-center justify-center shrink-0">
+              <Users className="text-purple-400" size={24} />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-white mb-2">Community of 10,000+ Investors</h2>
+              <p className="text-gray-400 text-sm leading-relaxed">Join a thriving community of like-minded investors across Kenya, Tanzania, and beyond. Real people, real results — see what our users are saying.</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <h2 className="text-xl font-bold text-white mt-8">Your Responsibility</h2>
-        <p>You should only invest what you can afford to lose entirely. Consider your financial situation, risk tolerance, and investment objectives before using this Platform.</p>
+      <div className="text-center mt-12 p-8 rounded-2xl bg-gradient-to-br from-fanta-950/60 to-gray-900 border border-fanta-800/30">
+        <h3 className="text-2xl font-black mb-3">Ready to Build Wealth?</h3>
+        <p className="text-gray-400 mb-6">Start with just 199 KES and watch your portfolio grow.</p>
+        <Link to="/register" className="btn-primary !px-8 !py-3 inline-flex items-center gap-2">
+          Get Started Free <Rocket size={18} />
+        </Link>
       </div>
     </div>
   );

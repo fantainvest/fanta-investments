@@ -14,7 +14,8 @@ import withdrawalRoutes from './routes/withdrawals';
 import adminRoutes from './routes/admin';
 import cryptoRoutes from './routes/crypto';
 import contentRoutes from './routes/content';
-import mpesaRoutes from './routes/mpesa';
+import activityRoutes from './routes/activity';
+
 
 const app = express();
 
@@ -39,7 +40,8 @@ app.use('/api/withdrawals', withdrawalRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/crypto', cryptoRoutes);
 app.use('/api/content', contentRoutes);
-app.use('/api/mpesa', mpesaRoutes);
+app.use('/api/activity', activityRoutes);
+
 
 // 404
 app.use((_req, res) => {

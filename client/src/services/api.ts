@@ -55,7 +55,6 @@ export const deposits = {
 // ── Withdrawals ──
 export const withdrawals = {
   list: () => request<any[]>('/withdrawals'),
-  threshold: () => request<{ meetsInvestmentThreshold: boolean; totalInvested: number; thresholdKES: number; minWithdrawalUSD: number; message: string }>('/withdrawals/threshold'),
   create: (data: { assetId: number; amount: number; walletAddress: string; network: string }) =>
     request<any>('/withdrawals', { method: 'POST', body: JSON.stringify(data) }),
 };
@@ -85,6 +84,14 @@ export const admin = {
   adminWallet: () => request<any[]>('/admin/admin-wallet'),
   adminWalletWithdraw: (data: { assetId: string; amount: number; walletAddress: string; network: string; notes?: string }) =>
     request<any>('/admin/admin-wallet/withdraw', { method: 'POST', body: JSON.stringify(data) }),
+};
+
+// ── Activity Feed ──
+export const activity = {
+  feed: (page: number = 1, limit: number = 50) =>
+    request<{ activities: any[]; total: number; page: number; limit: number; totalPages: number }>(
+      `/activity/feed?page=${page}&limit=${limit}`
+    ),
 };
 
 // ── Content ──
